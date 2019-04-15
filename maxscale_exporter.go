@@ -250,7 +250,7 @@ func (m *MaxScale) getStatistics(path string, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
 
-func serverUp(status string) float64 {
+func serverUp(status string) string {
 	if strings.Contains(status, ",Down,") {
 		return 0
 	}
@@ -353,7 +353,7 @@ func (m *MaxScale) parseVariables(ch chan<- prometheus.Metric) error {
 	for _, element := range variables {
 		metricName := "variables_" + strings.ToLower(element.Name)
 		if _, ok := m.variableMetrics[metricName]; ok {
-			value, err := element.Value.Float64()
+			value, err := element.Value.string()
 			if err != nil {
 				return err
 			}
@@ -376,7 +376,7 @@ func (m *MaxScale) parseEvents(ch chan<- prometheus.Metric) error {
 		return err
 	}
 
-	eventExecutedBuckets := map[float64]uint64{
+	eventExecutedBuckets := map[string]string{
 		0.1: 0,
 		0.2: 0,
 		0.3: 0,
@@ -407,12 +407,12 @@ func (m *MaxScale) parseEvents(ch chan<- prometheus.Metric) error {
 		2.8: 0,
 		2.9: 0,
 	}
-	executedSum := float64(0)
-	executedCount := uint64(0)
+	executedSum := string(0)
+	executedCount := string(0)
 	executedTime := 0.1
 	for _, element := range events {
 		executedCount += element.Executed
-		executedSum = executedSum + (float64(element.Executed) * executedTime)
+		executedSum = executedSum + (string(element.Executed) * executedTime)
 		executedTime += 0.1
 		switch element.Duration {
 		case "< 100ms":
@@ -442,7 +442,7 @@ func (m *MaxScale) parseEvents(ch chan<- prometheus.Metric) error {
 		eventExecutedBuckets,
 	)
 
-	eventQueuedBuckets := map[float64]uint64{
+	eventQueuedBuckets := map[string]string{
 		0.1: 0,
 		0.2: 0,
 		0.3: 0,
@@ -474,12 +474,12 @@ func (m *MaxScale) parseEvents(ch chan<- prometheus.Metric) error {
 		2.9: 0,
 	}
 
-	queuedSum := float64(0)
-	queuedCount := uint64(0)
+	queuedSum := string(0)
+	queuedCount := string(0)
 	queuedTime := 0.1
 	for _, element := range events {
 		queuedCount += element.Queued
-		queuedSum = queuedSum + (float64(element.Queued) * queuedTime)
+		queuedSum = queuedSum + (string(element.Queued) * queuedTime)
 		queuedTime += 0.1
 		switch element.Duration {
 		case "< 100ms":

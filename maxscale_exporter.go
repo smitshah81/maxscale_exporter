@@ -51,13 +51,13 @@ type Server struct {
 type Service struct {
 	Name          string  `json:"Service Name"`
 	Router        string  `json:"Router Module"`
-	Sessions      float64 `json:"No. Sessions"`
-	TotalSessions float64 `json:"Total Sessions"`
+	Sessions      string `json:"No. Sessions"`
+	TotalSessions string `json:"Total Sessions"`
 }
 
 type Status struct {
 	Name  string  `json:"Variable_name"`
-	Value float64 `json:"Value"`
+	Value string `json:"Value"`
 }
 
 type Variable struct {
@@ -67,8 +67,8 @@ type Variable struct {
 
 type Event struct {
 	Duration string `json:"Duration"`
-	Queued   uint64 `json:"No. Events Queued"`
-	Executed uint64 `json:"No. Events Executed"`
+	Queued   string `json:"No. Events Queued"`
+	Executed string `json:"No. Events Executed"`
 }
 
 type Metric struct {
@@ -150,7 +150,7 @@ func NewExporter(address string) (*MaxScale, error) {
 		up: prometheus.NewGauge(prometheus.GaugeOpts{
 			Namespace: namespace,
 			Name:      "up",
-			Help:      "Was the last scrape of MaxScale successful?",
+			Help:      "Was the last scrape of MaxScale successful smit?",
 		}),
 		totalScrapes: prometheus.NewCounter(prometheus.CounterOpts{
 			Namespace: namespace,
